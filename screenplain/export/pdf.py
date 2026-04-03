@@ -517,8 +517,6 @@ def pdf_metadata(screenplay):
         *screenplay.get_rich_attribute("Authors"),
     ]
     subject_lines = screenplay.get_rich_attribute("Subject")
-    creator_lines = screenplay.get_rich_attribute("Creator")
-    producer_lines = screenplay.get_rich_attribute("Producer")
     keywords_lines = screenplay.get_rich_attribute("Keywords")
 
     lang_lines = [
@@ -530,8 +528,6 @@ def pdf_metadata(screenplay):
         "title":   ' '.join([str(line) for line in title_lines]) or None,
         "subject": ' '.join([str(line) for line in subject_lines]) or None,
         "author": ', '.join([str(line) for line in author_lines]) or None,
-        "creator": ' '.join([str(line) for line in creator_lines]) or None,
-        "producer": ' '.join([str(line) for line in producer_lines]) or None,
         "keywords": [
             word.strip()
             for line in keywords_lines
