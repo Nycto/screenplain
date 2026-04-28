@@ -23,10 +23,8 @@ setup(
     },
     license='MIT',
     install_requires=[
+        'reportlab'
     ],
-    extras_require={
-        'PDF': 'reportlab'
-    },
     packages=[
         'screenplain',
         'screenplain.export',
