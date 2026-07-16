@@ -193,6 +193,7 @@ class Settings:
         self.parenthentical_style = ParagraphStyle(
             'parenthentical', default_style,
             leftIndent=13 * self.character_width,
+            rightIndent=self.frame_width - (38 * self.character_width),
             keepWithNext=1,
         )
         self.action_style = ParagraphStyle(
@@ -353,29 +354,34 @@ def add_slug(story, para, settings):
             story.append(paragraph)
 
 
+def _scaled_style(style, name, proportion) -> ParagraphStyle:
+    """Rebuild a style with both indents scaled to a narrower column.
+
+    Scaling every indent generically keeps a style's column intact: an
+    indent left unscaled would be measured against the full frame width
+    and swallow the narrower column.
+    """
+    return ParagraphStyle(
+        name, style,
+        leftIndent=style.leftIndent * proportion,
+        rightIndent=style.rightIndent * proportion,
+    )
+
+
 def _dialog_to_flowables(
     dialog, settings: Settings, column_width=None
 ) -> list[Flowable]:
     # If column_width is set, adjust indents proportionally
     if column_width is not None:
         proportion = column_width / settings.frame_width
-        character_left = settings.character_style.leftIndent * proportion
-        dialog_left = settings.dialog_style.leftIndent * proportion
-        parenthentical_left = (settings.parenthentical_style.leftIndent *
-                               proportion)
-        dialog_right = settings.dialog_style.rightIndent * proportion
-        character_style = ParagraphStyle(
-            'character-dual', settings.character_style,
-            leftIndent=character_left
+        character_style = _scaled_style(
+            settings.character_style, 'character-dual', proportion
         )
-        dialog_style = ParagraphStyle(
-            'dialog-dual', settings.dialog_style,
-            leftIndent=dialog_left,
-            rightIndent=dialog_right
+        dialog_style = _scaled_style(
+            settings.dialog_style, 'dialog-dual', proportion
         )
-        parenthentical_style = ParagraphStyle(
-            'parenth-dual', settings.parenthentical_style,
-            leftIndent=parenthentical_left
+        parenthentical_style = _scaled_style(
+            settings.parenthentical_style, 'parenth-dual', proportion
         )
     else:
         character_style = settings.character_style
