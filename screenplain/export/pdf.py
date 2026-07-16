@@ -298,12 +298,14 @@ class DocTemplate(BaseDocTemplate):
             id='title',
             leftPadding=0, topPadding=0, rightPadding=0, bottomPadding=0
         )
-        pageTemplates = [
-            PageTemplate(id='title', frames=[title_frame]),
-            PageTemplate(id='standard', frames=[frame])
+        title_template = PageTemplate(id='title', frames=[title_frame])
+        standard_template = PageTemplate(id='standard', frames=[frame])
+        page_templates = [
+            *([title_template] if self.has_title_page else []),
+            standard_template,
         ]
         BaseDocTemplate.__init__(
-            self, pageTemplates=pageTemplates, *args, **kwargs
+            self, pageTemplates=page_templates, *args, **kwargs
         )
 
     def handle_pageBegin(self):
