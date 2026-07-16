@@ -266,13 +266,12 @@ class SlugWithSceneNumbers(Flowable):
             self.settings.font_size
         )
 
-        # Left margin: Position to the left of frame
-        left_x = -0.75 * inch
-        canvas.drawString(left_x, 0, self.scene_number)
-
-        # Right margin: Right-aligned inside right margin area
-        right_x = self.settings.frame_width
-        canvas.drawRightString(right_x, 0, self.scene_number)
+        margin_offset = 0.75 * inch
+        right_edge = (
+            self.settings.page_width - margin_offset - self.settings.left_margin
+        )
+        canvas.drawString(-margin_offset, 0, self.scene_number)
+        canvas.drawRightString(right_edge, 0, self.scene_number)
 
         canvas.restoreState()
 
